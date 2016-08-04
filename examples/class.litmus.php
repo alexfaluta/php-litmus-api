@@ -91,12 +91,19 @@
 		
 		//Page Methods
 		//Creates a new web page test in your account.
-		public function pages_create() {
-			//Prepare request
-			$clients = '';
-			return $this->post_request('pages.xml', $post_data)
+		public function pages_create($post_data) {
+			return $this->post_request('pages.xml', $post_data);
 		}
 		
 		//Email Methods
-	}	
+		//Creates a new email test in your account.
+		public function emails_create($post_data) {
+			return $this->post_request('emails.xml', $post_data);
+		}
+		
+		//Returns a list of email clients available for testing.
+		public function emails_clients() {
+			return $this->get_request('emails/clients.xml');
+		}
+	}
 ?>
