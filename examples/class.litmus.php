@@ -154,7 +154,7 @@
 					<save_defaults>false</save_defaults>
 					<use_defaults>false</use_defaults>
 					<email_source>
-						<body><![CDATA[' . $body . ']]></body>
+						<body>' . htmlspecialchars($body) . '</body>
 						<subject>' . $subject . '</subject>
 					</email_source>
 				</test_set>
