@@ -1,13 +1,16 @@
 <?php
 	class Litmus {
+		//Protected variables
 		protected $subdomain, $username, $password;
 		
+		//Construct
 		public function __construct($subdomain, $username, $password) {
 			$this->subdomain = $subdomain;
 			$this->username  = $username;
 			$this->password  = $password;
 		}
 		
+		//GET request
 		private function get_request($url) {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, 'https://' . $this->subdomain . '.litmus.com/' . $url);
@@ -21,6 +24,7 @@
 			return $result;
 		}
 		
+		//POST request
 		private function post_request($url, $post_data) {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, 'https://' . $this->subdomain . '.litmus.com/' . $url);
@@ -36,13 +40,13 @@
 			return $result;
 		}
 		
-		//Test Set Methods
+		//TEST SET METHODS
 		//Returns details of a single test.
 		public function tests() {
 			return $this->get_request('tests.xml');
 		}
 		
-		//Returns details of a single test.
+		//Returns details of a single test using specific id.
 		public function tests_show($id) {
 			return $this->get_request('tests/' . $id . '.xml');
 		}
@@ -62,7 +66,7 @@
 			return $this->post_request('tests/' . $id . '.xml', $post_data);
 		}
 		
-		//Test Set Version Methods
+		//TEST SET VERSION METHODS
 		//Returns details of a single version for a particular test.
 		public function versions_show($id, $version) {
 			return $this->get_request('tests/' . $id . '/versions/' . $version . '.xml');
@@ -78,8 +82,8 @@
 			return $this->get_request('tests/' . $id . '/versions/' . $version . '/poll.xml');
 		}
 		
-		//????Result Methods
-		//?Used to retrieve details of a single result, useful when used in conjunction with the versions/poll method while waiting for individual results to complete.
+		//RESULTS METHODS
+		//Used to retrieve details of a single result, useful when used in conjunction with the versions/poll method while waiting for individual results to complete.
 		public function results_show($id, $version, $result_id) {
 			return $this->get_request('tests/' . $id . '/versions/' . $version . '/results/' . $result_id . '.xml');
 		}
@@ -87,6 +91,11 @@
 		//This method is used to update the properties of a result.
 		public function results_update($id, $version, $result_id) {
 			return $this->get_request('tests/' . $id . '/versions/' . $version . '/results/' . $result_id . '.xml');
+		}
+		
+		//Triggers a retest of just this client.
+		public function results_retest($id, $version, $result_id) {
+			return $this->post_request('tests/' . $id . '/versions/' . $version . '/results/' . $result_id . '/retest.xml', '')
 		}
 		
 		//PAGE METHODS
