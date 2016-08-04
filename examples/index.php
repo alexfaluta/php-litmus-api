@@ -3,7 +3,7 @@
 	include_once 'class.litmus.php';
 	
 	//Create new Litmus
-	$litmus = new Litmus('subdomeniu', 'username', 'password');
+	$litmus = new Litmus('subdomain', 'username', 'password');
 	
 	//Create new email test
 	$clients = $litmus->emails_clients();
