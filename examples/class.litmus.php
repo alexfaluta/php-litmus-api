@@ -89,15 +89,15 @@
 			return $this->get_request('tests/' . $id . '/versions/' . $version . '/results/' . $result_id . '.xml');
 		}
 		
-		//Page Methods
+		//PAGE METHODS
 		//Creates a new web page test in your account.
 		public function pages_create($post_data) {
 			return $this->post_request('pages.xml', $post_data);
 		}
 		
-		//Email Methods
+		//EMAIL METHODS
 		//Creates a new email test in your account.
-		public function emails_create($post_data) {
+		public function emails_create($clients, $body, $subject) {
 			return $this->post_request('emails.xml', $post_data);
 		}
 		
