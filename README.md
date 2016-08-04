@@ -23,9 +23,9 @@ Result Methods
 - results/retest
 
 Page Methods
-- pages/create
-- pages/clients
+- pages/create (done)
+- pages/clients (done)
 
 Email Methods 
-- emails/create
-- emails/clients
+- emails/create (not ready)
+- emails/clients (done)
