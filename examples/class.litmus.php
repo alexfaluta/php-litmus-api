@@ -98,12 +98,50 @@
 		//EMAIL METHODS
 		//Creates a new email test in your account.
 		public function emails_create($clients, $body, $subject) {
+			//Prepare clients
+			$clients_xml = '';
+			foreach($clients as $client) {
+				$clients_xml = $clients_xml . '<application><code>' . $client . '</code></application>' . "\n";
+			}
+			
+			//Create XML template
+			$post_data = '
+				<?xml version="1.0"?>
+				<test_set>
+					<applications type="array">
+						' . $clients_xml . '
+					</applications>
+					<save_defaults>false</save_defaults>
+					<use_defaults>false</use_defaults>
+					<email_source>
+						<body>' . $body . '</body>
+						<subject>' . $subject . '</subject>
+					</email_source>
+				</test_set>
+			';
+			
+			//Return result
 			return $this->post_request('emails.xml', $post_data);
 		}
 		
 		//Returns a list of email clients available for testing.
 		public function emails_clients() {
-			return $this->get_request('emails/clients.xml');
+			//Get clients from server
+			$clients_xml = $this->get_request('emails/clients.xml');
+			
+			//Prepare empty array
+			$clients = array();
+			
+			//Get email clients from XML
+			$applications = new SimpleXMLElement($clients_xml);
+			foreach($applications->testing_application as $application) {
+				if($application->result_type == 'email') {
+					array_push($clients, (string)$application->application_code);
+				}
+			}
+			
+			//Return results
+			return $clients;
 		}
 	}
 ?>
