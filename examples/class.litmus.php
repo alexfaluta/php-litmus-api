@@ -91,8 +91,48 @@
 		
 		//PAGE METHODS
 		//Creates a new web page test in your account.
-		public function pages_create($post_data) {
+		public function pages_create($clients, $url) {
+			//Prepare clients
+			$clients_xml = '';
+			foreach($clients as $client) {
+				$clients_xml = $clients_xml . '<application><code>' . $client . '</code></application>' . "\n";
+			}
+			
+			//Create XML template
+			$post_data = '
+				<?xml version="1.0"?>
+				<test_set>
+					<applications type="array">
+						' . $clients_xml . '
+					</applications>
+					<save_defaults>false</save_defaults>
+					<use_defaults>false</use_defaults>
+					<url>' . $url . '</url>
+				</test_set>
+			';
+			
+			//Return results
 			return $this->post_request('pages.xml', $post_data);
+		}
+		
+		//Returns a list of web browsers available for testing.
+		public function pages_clients() {
+			//Get pages from server
+			$pages_xml = $this->get_request('pages/clients.xml');
+			
+			//Prepare empty array
+			$clients = array();
+			
+			//Get pages clients from XML
+			$applications = new SimpleXMLElement($pages_xml);
+			foreach($applications->testing_application as $application) {
+				if($application->result_type == 'page') {
+					array_push($clients, (string)$application->application_code);
+				}
+			}
+			
+			//Return results
+			return $clients;
 		}
 		
 		//EMAIL METHODS
@@ -114,7 +154,7 @@
 					<save_defaults>false</save_defaults>
 					<use_defaults>false</use_defaults>
 					<email_source>
-						<body>' . $body . '</body>
+						<body><![CDATA[' . $body . ']]></body>
 						<subject>' . $subject . '</subject>
 					</email_source>
 				</test_set>
