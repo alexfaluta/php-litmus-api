@@ -43,4 +43,13 @@
 	
 	//Returns a list of email clients available for testing.
 	echo $litmus->emails_clients();
+	
+	//Shows a list of the 20 most recent lists you've created within your Litmus account.
+	echo $litmus->reports_index();
+	
+	//Retrieves a single specified report (campaign).
+	echo $litmus->reports_show($id);
+	
+	//Creates a new report if you have available credits.
+	echo $litmus->reports_create($name);
 ?>

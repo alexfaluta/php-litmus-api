@@ -201,5 +201,30 @@
 			//Return results
 			return $clients;
 		}
+		
+		//REPORT METHODS
+		//Shows a list of the 20 most recent lists you've created within your Litmus account.
+		public function reports_index() {
+			return $this->get_request('reports.xml');
+		}
+		
+		//Retrieves a single specified report (campaign).
+		public function reports_show($id) {
+			return $this->get_request('reports/' . $id . '.xml');
+		}
+		
+		//Creates a new report if you have available credits.
+		public function reports_create($name) {
+			//Create XML template
+			$post_data = '
+				<?xml version="1.0"?>
+				<report>
+					<name>' . $name . '</name>
+				</report>
+			';
+			
+			//Retun results
+			return $this->post_request('reports.xml', $post_data);
+		}
 	}
 ?>
