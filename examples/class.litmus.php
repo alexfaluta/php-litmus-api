@@ -41,7 +41,7 @@
 		}
 		
 		//TEST SET METHODS
-		//Returns details of a single test.
+		//Returns details for all tests.
 		public function tests() {
 			return $this->get_request('tests.xml');
 		}
@@ -89,13 +89,22 @@
 		}
 		
 		//This method is used to update the properties of a result.
-		public function results_update($id, $version, $result_id) {
-			return $this->get_request('tests/' . $id . '/versions/' . $version . '/results/' . $result_id . '.xml');
+		public function results_update($id, $version, $result_id, $state) {
+			//Create XML template
+			$post_data = '
+				<?xml version="1.0" encoding="UTF-8"?>
+				<result>
+					<check_state>' . $state . '</check_state>
+				</result>
+			';
+			
+			//Return results
+			return $this->post_request('tests/' . $id . '/versions/' . $version . '/results/' . $result_id . '.xml', $post_data);
 		}
 		
 		//Triggers a retest of just this client.
 		public function results_retest($id, $version, $result_id) {
-			return $this->post_request('tests/' . $id . '/versions/' . $version . '/results/' . $result_id . '/retest.xml', '')
+			return $this->post_request('tests/' . $id . '/versions/' . $version . '/results/' . $result_id . '/retest.xml', '');
 		}
 		
 		//PAGE METHODS
