@@ -226,5 +226,46 @@
 			//Retun results
 			return $this->post_request('reports.xml', $post_data);
 		}
+		
+		//CUSTOM METHODS
+		//Select images for specific test and store into array
+		public function select_tests_images($id) {
+			//Return details of a single test
+			$tests_show = $this->tests_show($id);
+			
+			//Prepare XML content
+			$xml = new SimpleXMLElement($tests_show);
+			
+			//Create empty array
+			$array = array();
+			
+			//Get all results
+			$results = $xml->test_set_versions->test_set_version->results->result;
+			foreach($results as $result) {
+				//Prepare variables
+				$result_id = (int)$result->id;
+				$result_state = $result->state;
+				$platform_name = $result->testing_application->platform_name;
+				$application_long_name = $result->testing_application->application_long_name;
+
+				//Store into array
+				$array[$result_id] = array('result' => array($result_state, $platform_name, $application_long_name), 'images');
+
+				//Get all images
+				$result_images = $result->result_images->result_image;
+				foreach($result_images as $result_image) {
+					//Prepare variables
+					$image_type = $result_image->image_type;
+					$full_image = $result_image->full_image;
+					$thumbnail_image = $result_image->thumbnail_image;
+					
+					//Store into array
+					$array[$result_id]['image'][] = array($image_type, $full_image, $thumbnail_image);
+				}
+			}
+			
+			//Return result
+			return $array;
+		}
 	}
 ?>

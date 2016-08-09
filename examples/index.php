@@ -52,4 +52,7 @@
 	
 	//Creates a new report if you have available credits.
 	echo $litmus->reports_create($name);
+	
+	//Select images for specific test and store into array
+	var_dump($litmus->select_tests_images($id));
 ?>
